@@ -1,0 +1,12 @@
+# Wiebe Jelsma 12468223
+Q1: Explain the difference between the == operator and the === operator.
+=== checks everything, so the types and the values need to be the same, while with == only the value will be checked but not the type
+
+Q2: Explain what a closure is. (Note that JavaScript programs use closures very often)
+A function within another function. The inner function can use the data/variables form the outer function. 
+
+Q3: Explain what higher order functions are.
+A function which either uses a function as argument or returns a function
+
+Q4: Explain what a query selector is and give an example line of JavaScript that uses a query selector.
+A query selector will return the first element that matches a specific defined element.

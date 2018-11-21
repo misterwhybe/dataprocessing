@@ -10,3 +10,6 @@ A function which either uses a function as argument or returns a function
 
 Q4: Explain what a query selector is and give an example line of JavaScript that uses a query selector.
 A query selector will return the first element that matches a specific defined element.
+return function(x){
+    return alpha * x + beta;
+    }

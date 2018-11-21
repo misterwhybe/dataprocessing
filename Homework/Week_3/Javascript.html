@@ -4,21 +4,112 @@
         <title>
             Federal Debt: Total Public Debt as Percent of Gross Domestic Product
         </title>
-
     </head>
     <body>
+        <h1>
+            Oh Hello this is a graph
+        </h1>
+        <canvas id="line" width="600" height="300" style="border:1px solid #000000;">
+        </canvas> 
         <script>
+            // console.log("Hello world!");
             var fileName = "data.json";
             var txtFile = new XMLHttpRequest();
             txtFile.onreadystatechange = function() {
                 if (txtFile.readyState === 4 && txtFile.status == 200) {
-                    console.log(JSON.parse(txtFile.responseText));
+                    var data = JSON.parse(txtFile.responseText);
+                    console.log(data);
+                    console.log(Object.values(data)[0][16]);
+
+                    var seveno = new Date(Object.values(data)[0][16])
+                    var sevenone = new Date(Object.values(data)[0][20])
+                    var seventwo = new Date(Object.values(data)[0][24])
+                    var seventhree = new Date(Object.values(data)[0][28])
+                    var sevenfour = new Date(Object.values(data)[0][32])
+                    var sevenfive = new Date(Object.values(data)[0][36])
+                    var sevensix = new Date(Object.values(data)[0][40])
+                    var sevenseven = new Date(Object.values(data)[0][44])
+                    var seveneight = new Date(Object.values(data)[0][48])
+                    var sevennine = new Date(Object.values(data)[0][52])
+                    var eighto = new Date(Object.values(data)[0][56])
+                    console.log(seveno)
+                    var a = sevenone.getTime();
+                    var b = seventwo.getTime();
+                    var c = seventhree.getTime();
+                    var d = sevenfour.getTime();
+                    var e = sevenfive.getTime();
+                    var f = sevensix.getTime();
+                    var g = sevenseven.getTime();
+                    var h = seveneight.getTime();
+                    var i = sevennine.getTime();
+                    var j = eighto.getTime();
+
+
+                    console.log(a)
+                    console.log(b)
+                    console.log(c)
+                    console.log(d)
+                    console.log(e)
+                    console.log(f)
+                    console.log(g)
+                    console.log(h)
+                    console.log(i)
+                    console.log(j)
+
+
+
+
                 }
             }
             txtFile.open("GET", fileName);
             txtFile.send();
+
+            console.log("hoi");
+
+                
             console.log("Hello world!");
+            
         </script>
+        <script>
+            domain = [0, 600]
+            range = [0, 300]
+            function createTransform(domain, range){
+                // domain is a two-element array of the data bounds [domain_min, domain_max]
+                // range is a two-element array of the screen bounds [range_min, range_max]
+                // this gives you two equations to solve:
+                // range_min = alpha * domain_min + beta
+                // range_max = alpha * domain_max + beta
+                    // a solution would be:
+
+                
+                var domain_min = domain[0]
+                var domain_max = domain[1]
+                var range_min = range[0]
+                var range_max = range[1]
+                document.log(domain_min)
+
+                // formulas to calculate the alpha and the beta
+                    var alpha = (range_max - range_min) / (domain_max - domain_min)
+                var beta = range_max - alpha * domain_max
         
+
+                // returns the function for the linear transformation (y= a * x + b)
+                return function(x){
+                return alpha * x + beta;
+                }
+            }
+        </script>
+        <script>
+            var canvas = document.getElementById('line');
+            var ctx = canvas.getContext("2d")
+            
+            ctx.beginPath();
+            ctx.moveTo(0,0);
+            ctx.lineTo(a,150);
+            ctx.lineTo(b,100);
+            ctx.lineTo(c,500);
+            ctx.stroke();
+        </script>
+  
     </body>
 </html>

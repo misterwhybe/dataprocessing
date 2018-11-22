@@ -46,6 +46,10 @@
 
                     var canvas = document.getElementById('line');
                     var ctx = canvas.getContext("2d")
+                    ctx.fillText("Years", 300, 400);
+                    ctx.fillText("Debt % of GDP", 10, 10);
+                    ctx.fillText("1970", 30, 380)
+                    ctx.fillText("1985", 530, 380)
                     ctx.transform(1, 0, 0, -1, 0, canvas.height)
                     // get x-axis
                     ctx.beginPath()
@@ -60,6 +64,7 @@
                     ctx.stroke()
                     
                     // make line graph
+                    
                     ctx.beginPath();
                     ctx.moveTo(50,10);
                     for(i = 0; i < 19; i++){

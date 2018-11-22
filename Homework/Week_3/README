@@ -3,6 +3,4 @@ This is a website made by Wiebe Jelsma.
 Here you can see how the federal debt changed in regard of the GDP.
 The period we used is every 1st of January between 1970-1990.
 The data is downloaded from the source https://fred.stlouisfed.org/series/GFDEGDQ188S
-My website is to be seen on http://localhost:8080/Javascript.html
-Or on http(s)://misterwhybe.github.io/dataprocessing
-
+My website is to be seen on https://misterwhybe.github.io/dataprocessing/

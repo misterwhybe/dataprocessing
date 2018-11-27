@@ -2,8 +2,8 @@
 <html>
   <head>
         <meta charset="utf-8">
-        <title>D3 Test</title>
-      <script type="text/javascript" src="https://d3js.org/d3.v5.min.js"></script>
+        <title>Renewable Energy</title>
+        <script type="text/javascript" src="https://d3js.org/d3.v5.min.js"></script>
         <style type = "text/css">
             .axis path,
             .axis line {
@@ -11,22 +11,15 @@
                 stroke: black;
                 shape-rendering: crispEdges;
             }
-            path.domain{
-                stroke: none;
-            }
-            .y .tick line{
-                stroke: rgb(221, 221, 221);
-                
-            }
 
-            .axis text {
+            .axis test {
                 font-family: sans-serif;
                 font-size: 11px;
             }
         </style>
   </head>
   <body>
-      <div id = "chart"></div>
+      <div id = "bar"></div>
     <!-- This is where your bar chart will go -->
     <script type="text/javascript">
         d3.select("body")
@@ -44,66 +37,67 @@
                 Values.push(Object.values(data)[1][i])
             }            
 
-            margin = {top: 0, right: 0, bottom: 40, left: 20}
-            var height = 650 - margin.bottom;
+            margin = {top: 5, right: 0, bottom: 40, left: 60}
+            var height = 650 - margin.top - margin.bottom;
             var width = 1250 - margin.left;
             var barWidth = 15;
             var barOffset = 15;
             var barPadding = 5;
 
             var xScale = d3.scaleLinear()
-                                .domain([1960, d3.max(Dates, function (d) {
-                                return d;})])
-                                .range([margin.left, width - margin.left]);
-            var yScale = d3.scaleLinear()
-                                .domain([0, d3.max(Values, function (d) {
+                .domain([1960, d3.max(Dates, function (d) {
                     return d;})])
-                                .range([margin.bottom, height - margin.bottom]); 
+                // .range([margin.left, width - margin.left]);
+            var yScale = d3.scaleLinear()
+                .domain([0, d3.max(Values, function (d) {
+                    return d;})])
+                .range([height - margin.bottom,margin.bottom]); 
 
-           var xAxis = d3.axisBottom(xScale).tickFormat(function (d) {
-                return d.x;});
+           var xAxis = d3.axisBottom(xScale)
                                                        
             var yAxis = d3.axisLeft(yScale);
 
 
             var svg = d3.select("body")
-
                 .append("svg")
                 .attr("width", width + margin.left)
                 .attr("height", height + margin.bottom)
                 .style("background", "lightyellow")
                 .append("g")
-                .selectAll("rect")
-                    .data(Values)
-                    .enter()
-                    .append("rect")
-                        .style("fill", "lightgreen")
-                        .attr("width", barWidth)
-                        .attr("height", function(d){
-                            return yScale(d);
-                        })
+            svg.selectAll("rect")
+                .data(Values)
+                .enter()
+                .append("rect")
+                .style("fill", "lightgreen")
+                .attr("width", barWidth)
+                .attr("height", function(d){
+                    return yScale(d);
+                })
 
-                        .attr("x", function(d, i) {
-                            return margin.left + i * (width / Dates.length);
-                        })
-                        .attr("y", function(d){
-                            return height - yScale(d)
-                        })
-                        .attr("width", width / Dates.length)
-                        .attr("height", function(d){
-                            return yScale(d)
-                        })
+                .attr("x", function(d, i) {
+                    return margin.left + i * (width / Dates.length);
+                })
+                .attr("y", function(d){
+                    return yScale(d)
+                })
+                .attr("width", width / Dates.length)
+                .attr("height", function(d){
+                    return height - yScale(d) 
+                })
+            // try to make x-axis, no idea why it doesnt work
             svg.append("g")
                 .attr("class", "axis") 
                 .attr("transform", "translate(0," + height + ")")
                 .call(xAxis);
+            // try to make y-axis
             svg.append("g")
-                .attr("class", "y axis")
-                .attr("transform", "translate("+[margin.left, 5]+")")
+                .attr("class", "axis")
+                .attr("transform", "translate("+[margin.left, margin.bottom]+")")
                 .call(yAxis)
+            // try to name the y-axis, was still working on it
             svg.append("text")
                 .attr("transform", "rotate(-90)")
-                .attr("y", 6)
+                .attr("y", margin.bottom)
                 .style("text-anchor", "end")
                 .text("Renewable Energy");
             

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+  <head>
+        <meta charset="utf-8">
+        <title>D3 Test</title>
+      <script type="text/javascript" src="https://d3js.org/d3.v5.min.js"></script>
+  </head>
+  <body>
+      <div id = "chart"></div>
+    <!-- This is where your bar chart will go -->
+    <script type="text/javascript">
+        d3.select("body").append("p").text("Renewable energy of Australia");
+        var Dates = []
+        var Values = []
+        d3.json("data.json").then(function(data){
+            for(i = 0; i < 57; i++){
+                Dates.push(Object.values(data)[0][i])
+                Values.push(Object.values(data)[1][i])
+            }
+            console.log(Dates)
+            console.log(Values)
+            
+
+            margin = {top: 0, right: 0, bottom: 40, left: 40}
+            var height = 700 - margin.bottom;
+            var width = 1200 + margin.left;
+            var barWidth = 15;
+            var barOffset = 5;
+            var barPadding = 5;
+            
+
+            var svg = d3.select("body")
+                .append("p")
+                    .text("By: Wiebe Jelsma (12468223). This dataset is found \
+                    on OECT, and it is about the \
+                    Renewable energy of Australia.")
+                .append("svg")
+                .attr("width", width + margin.left)
+                .attr("height", height + margin.bottom)
+                .style("background", "#f4f4f4")
+                .selectAll("rect")
+                    .data(Values)
+                    .enter()
+                    .append("rect")
+                        .style("fill", "lightgreen")
+                        .attr("width", barWidth)
+                        .attr("height", function(d){
+                            return d;
+                        })
+
+                        .attr("x", function(d, i) {
+                            return 40 + i * (width / Dates.length);
+                        })
+                        .attr("y", function(d){
+                            return height - (d / 15)
+                        })
+                        .attr("width", width / Dates.length - barPadding)
+                        .attr("height", function(d){
+                            return d / 15
+                        })
+                        // svg.append("text")      // text label for the x axis
+                        //     .attr("x", width / 10 )
+                        //     .attr("y",  height + margin.bottom)
+                        //     .style("text-anchor", "middle")
+                        //     .text("Year");
+                        // svg.append("g")
+                        //     .call(d3.axisLeft(yScale));
+            
+        });
+
+        
+    </script>
+  </body>
+</html>

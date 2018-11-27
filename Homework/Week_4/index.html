@@ -37,9 +37,9 @@
                 Values.push(Object.values(data)[1][i])
             }            
 
-            margin = {top: 5, right: 0, bottom: 40, left: 60}
+            margin = {top: 5, right: 10, bottom: 40, left: 60}
             var height = 650 - margin.top - margin.bottom;
-            var width = 1250 - margin.left;
+            var width = 1250 - margin.left - margin.right;
             var barWidth = 15;
             var barOffset = 15;
             var barPadding = 5;
@@ -47,11 +47,11 @@
             var xScale = d3.scaleLinear()
                 .domain([1960, d3.max(Dates, function (d) {
                     return d;})])
-                // .range([margin.left, width - margin.left]);
+                .range([margin.left, width - margin.left - margin.right]);
             var yScale = d3.scaleLinear()
                 .domain([0, d3.max(Values, function (d) {
                     return d;})])
-                .range([height - margin.bottom,margin.bottom]); 
+                .range([height - margin.bottom ,margin.bottom]); 
 
            var xAxis = d3.axisBottom(xScale)
                                                        
@@ -84,7 +84,7 @@
                 .attr("height", function(d){
                     return height - yScale(d) 
                 })
-            // try to make x-axis, no idea why it doesnt work
+            // try to make x-axis
             svg.append("g")
                 .attr("class", "axis") 
                 .attr("transform", "translate(0," + height + ")")

@@ -46,10 +46,10 @@ window.onload = function() {
             .append("p").text("Scatterplot")
             .append("p").text("By: Wiebe Jelsma (12468223)")
             .append("p").text("The data of women in science can be found on:")
-            .append("p").text("http://stats.oecd.org/SDMX-JSON/data/MSTI_PUB/\
+            .append("p").text("https://stats.oecd.org/SDMX-JSON/data/MSTI_PUB/\
             TH_WRXRS.FRA+DEU+KOR+NLD+PRT+GBR/all?startTime=2007&endTime=2015")
             .append("p").text("The consumer Confidence data can be found on:")
-            .append("p").text(" http://stats.oecd.org/SDMX-JSON/data/HH_DASH/\
+            .append("p").text(" https://stats.oecd.org/SDMX-JSON/data/HH_DASH/\
             FRA+DEU+KOR+NLD+PRT+GBR.COCONF.A/all?startTime=2007&endTime=2015")       
 
             // set margin and padding

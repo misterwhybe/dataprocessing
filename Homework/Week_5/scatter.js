@@ -48,7 +48,7 @@ window.onload = function() {
             .append("p").text("The data of women in science can be found on:")
             .append("p").text("http://stats.oecd.org/SDMX-JSON/data/MSTI_PUB/\
             TH_WRXRS.FRA+DEU+KOR+NLD+PRT+GBR/all?startTime=2007&endTime=2015")
-            .append("p").text("The data of consumer Confidence can be found on:")
+            .append("p").text("The consumer Confidence data can be found on:")
             .append("p").text(" http://stats.oecd.org/SDMX-JSON/data/HH_DASH/\
             FRA+DEU+KOR+NLD+PRT+GBR.COCONF.A/all?startTime=2007&endTime=2015")       
 
@@ -58,7 +58,7 @@ window.onload = function() {
             var width = 750 - margin.left - margin.right;
             var padding = 40;
             // maybe use for legend
-            Colours1 = { "France":"red", "Germany":"purple", "Korea":"gray", 
+            Colours = { "France":"red", "Germany":"purple", "Korea":"gray", 
             "Netherlands":"orange", "Portugal":"green", "Great Britain":"blue"}
             
             // scale axis
@@ -117,7 +117,8 @@ window.onload = function() {
             // add x-axis
             svg.append("g")
                 .attr("class", "axis") 
-                .attr("transform", "translate("+[ 0, height - margin.bottom - margin.top]+")")
+                .attr("transform", "translate("+ 
+                [ 0, height - margin.bottom - margin.top]+")")
                 .call(xAxis);
             // label x-axis
             svg.append("text")
@@ -139,8 +140,9 @@ window.onload = function() {
                 .style("text-anchor", "end")
                 .text("Consumer Satisfaction")
 
+            // add legend with colours and countries
             var legend = svg.selectAll(".legend")
-                .data(Object.keys(Colours1))
+                .data(Object.keys(Colours))
                 .enter()
                 .append("g")
                 .attr("class", "legend")

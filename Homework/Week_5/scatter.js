@@ -5,20 +5,6 @@ var consConf = "http://stats.oecd.org/SDMX-JSON/data/HH_DASH/FRA+DEU+KOR+NLD+PRT
 
 window.onload = function() {
     var requests = [d3.json(womenInScience), d3.json(consConf)];
-    FRA_con = []
-    DEU_con = []
-    KOR_con = []
-    NLD_con = []
-    PRT_con = []
-    GBR_con = []
-
-    FRA_years = []
-    DEU_years = []
-    KOR_years = []
-    NLD_years = []
-    PRT_years = []
-    GBR_years = []
-
     women = []
     women_years = []
     consumers = []
@@ -26,59 +12,22 @@ window.onload = function() {
     Promise.all(requests).then(function(response) {
         womenInScience = transformResponse(response[0])
         consConf = transformResponse(response[1])
-        missing =  [10, 12, 14, 16, 28, 30, 46]
-        console.log(consConf[1].Country)
-        
-
+        missing =  [10, 12, 14, 16, 28, 30, 46]        
+        // get data of women in science
         for(i=0; i<47; i++){
             women.push(womenInScience[i].datapoint)
             women_years.push(womenInScience[i].time)
 
         }
+        // add None-values at places where no data is found
         for(i=0; i<missing.length; i++){
             women.splice(missing[i], 0, "None")
         }
+        // get data for consumer satisfaction
         for(i=0; i<54; i++){
             consumers.push(consConf[i].datapoint)
         }
-        console.log(womenInScience)
-
-        // for(i = 0; i < 9; i +=1){
-        //     consumers.push(consConf[i].datapoint)
-        //     FRA_con.push(consConf[i].datapoint)
-        //     FRA_years.push(consConf[i].time)
-        // }
-        // for(i = 9; i < 18; i +=1){
-        //     consumers.push(consConf[i].datapoint)
-
-        //     NLD_con.push(consConf[i].datapoint)
-        //     NLD_years.push(consConf[i].time)
-        // }
-        // for(i = 18; i < 27; i +=1){
-        //     consumers.push(consConf[i].datapoint)
-
-        //     PRT_con.push(consConf[i].datapoint)
-        //     PRT_years.push(consConf[i].time)
-        // }
-        // for(i = 27; i < 36; i +=1){
-        //     consumers.push(consConf[i].datapoint)
-
-        //     DEU_con.push(consConf[i].datapoint)
-        //     DEU_years.push(consConf[i].time)
-        // }
-        // for(i = 36; i < 45; i +=1){
-        //     consumers.push(consConf[i].datapoint)
-
-        //     GBR_con.push(consConf[i].datapoint)
-        //     GBR_years.push(consConf[i].time)
-        // }
-        // for(i = 45; i < 54; i +=1){
-        //     consumers.push(consConf[i].datapoint)
-
-        //     KOR_con.push(consConf[i].datapoint)
-        //     KOR_years.push(consConf[i].time)
-        // }
-
+        // add 2 datasets together, make arrays within arrat
         Dataset = []
         Temp = []
         for(i=0; i<54; i++){
@@ -86,14 +35,13 @@ window.onload = function() {
             Dataset.push(Temp)
         }
         Data=[]
+        // get rid of arrays with none values
         for(i=0; i<54; i++){
             if(Dataset[i][1] !== "None"){
                 Data.push(Dataset[i])
             }
-        }
-        console.log(Data)
-  
-        
+        }  
+        // add text and tell where data comes from
         d3.select("body")
             .append("p").text("Scatterplot")
             .append("p").text("By: Wiebe Jelsma (12468223)")
@@ -102,15 +50,18 @@ window.onload = function() {
             TH_WRXRS.FRA+DEU+KOR+NLD+PRT+GBR/all?startTime=2007&endTime=2015")
             .append("p").text("The data of consumer Confidence can be found on:")
             .append("p").text(" http://stats.oecd.org/SDMX-JSON/data/HH_DASH/\
-            FRA+DEU+KOR+NLD+PRT+GBR.COCONF.A/all?startTime=2007&endTime=2015");       
+            FRA+DEU+KOR+NLD+PRT+GBR.COCONF.A/all?startTime=2007&endTime=2015")       
 
+            // set margin and padding
             margin = {top: 10, right: 25, bottom: 30, left: 30}
             var height = 400 - margin.top - margin.bottom;
             var width = 750 - margin.left - margin.right;
             var padding = 40;
-            Colours1 = { "FRA":"red", "DEU":"black", "KOR":"gray", "NLD":"orange", "PRT":"green", "GBR":"blue"}
+            // maybe use for legend
+            Colours1 = { "France":"red", "Germany":"purple", "Korea":"gray", 
+            "Netherlands":"orange", "Portugal":"green", "Great Britain":"blue"}
             
-
+            // scale axis
             var xScale = d3.scaleLinear()
                     .domain([0, d3.max(Data, function(d) { return d[1]; })])
                     .range([padding, width - padding * 2]);
@@ -120,24 +71,25 @@ window.onload = function() {
 
             var xAxis = d3.axisBottom(xScale)                                          
             var yAxis = d3.axisLeft(yScale);
-
+            // make the svg
             var svg = d3.select("body")
                 .append("svg")
                 .attr("width", width)
                 .attr("height", height)
                 .style("background", "white")
 
+            // create the circles
             svg.selectAll("circle")
                 .data(Data)
                 .enter()
                 .append("circle")
+                // hard-code the different colours
                 .style("fill", function(d, i){
                     if(i<9){
-                        // return Object.values(Colours1)[0]
                         return "red"
                     }
                     if(i > 8 & i< 14){
-                        return "black"
+                        return "purple"
                     }
                     if(i > 13 & i< 23){
                         return "grey"
@@ -153,7 +105,7 @@ window.onload = function() {
                     }
                     
                 })
-
+                // get x and y values for circles
                 .attr("cx", function(d) {
                     return xScale(d[1]);
                 })
@@ -188,18 +140,47 @@ window.onload = function() {
                 .text("Consumer Satisfaction")
 
             var legend = svg.selectAll(".legend")
-                .data(Colours1.keys)
+                .data(Object.keys(Colours1))
                 .enter()
                 .append("g")
-                .classed("legend", true)
+                .attr("class", "legend")
                 .attr("transform", function(d, i) {
-                    return "translate(0," + i * 20 + ")";
+                  return "translate(0," + i * 20 + ")";
                 });
+              
+              // draw legend colored rectangles
             legend.append("rect")
-                .attr("x", width + 10)
-                .attr("width", 12)
-                .attr("height", 12)
-                .style("fill", "black");
+                .attr("x", width - padding)
+                .attr("width", 18)
+                .attr("height", 18)
+                .style("fill", function(d, i){
+                    if(i==0){
+                        return "red"
+                    }
+                    if(i==1){
+                        return "purple"
+                    }
+                    if(i==2){
+                        return "gray"
+                    }
+                    if(i==3){
+                        return "orange"
+                    }
+                    if(i==4){
+                        return "green"
+                    }
+                    if(i==5){
+                        return "blue"
+                    }
+                })
+            legend.append("text")
+                .attr("x", width - margin.top)
+                .attr("y", 9)
+                // .attr("dy", ".35em")
+                .style("text-anchor", "end")
+                .text(function(d) {
+                  return d;
+                });
     }).catch(function(e){
         throw(e);
     });

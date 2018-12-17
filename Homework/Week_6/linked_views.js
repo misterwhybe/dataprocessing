@@ -27,11 +27,11 @@ window.onload = function() {
 
         console.log(life)
         d3.select("body")
-            .append("p").text("Income per Household")
+            .append("p").text("Hover over a land to see its adjusted net \
+            average household income, click it to see its average life \
+            expectancy and the total amount of years of education the \
+            residents have on average")
             .append("p").text("By: Wiebe Jelsma (12468223)")
-            .append("p").text("Hover over a land to see its average household \
-             income, click it to see its average life expectancy and the total \
-             amount of years of education the residents have on average")
           
   
         var format = d3.format(",");
@@ -56,7 +56,7 @@ window.onload = function() {
   
         var margin = {top: 20, right: 0, bottom: 0, left: 50},
                     width = 960 - margin.left - margin.right,
-                    height = 600 - margin.top - margin.bottom;
+                    height = 650 - margin.top - margin.bottom;
         var padding = 20;
   
         var color = d3.scaleThreshold()
@@ -132,6 +132,12 @@ window.onload = function() {
                     Education = educationYears[place]
                     data.push({name: d.properties.name, value: Life},{name: d.properties.name, value: Education})
 
+                    make_barchart(data)
+                }
+                else{
+                    Life = life[life.length - 1]
+                    Education = education[education.length - 1]
+                    data.push({name: "OECD", value: Life}, {name: "OECD", value: Education})
                     make_barchart(data)
                 }
 

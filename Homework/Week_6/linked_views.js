@@ -31,7 +31,8 @@ window.onload = function() {
             average household income, click it to see its average life \
             expectancy and the total amount of years of education the \
             residents have on average. \n If a country without data \
-            is clicked, the average of the OECD will be shown")
+            is clicked, the average of the OECD will be shown. Move cursor \
+             over the barchart to see its values!")
             .append("p").text("By: Wiebe Jelsma (12468223)")
           
   
@@ -184,8 +185,8 @@ window.onload = function() {
         function make_barchart(data){
 
                 var margin = {top: 15, right: 5, bottom: 60, left: 25};
-                var width = 500 - margin.left - margin.right;
-                var height = 400 - margin.top - margin.bottom;
+                var width = 480 - margin.left - margin.right;
+                var height = 380 - margin.top - margin.bottom;
       
                 var padding = 20;
       
@@ -237,6 +238,21 @@ window.onload = function() {
                             .attr("fill", function(d,i) {
                                 return colors(i);
                             })
+                            .on('mouseover', function(d){
+                                tooltip.transition()
+                                  .duration(600)
+                                  .style('opacity', 0.9)
+                                tooltip.html(d.value)
+                                  .style('left', (d3.event.pageX) + 'px')
+                                  .style('top', (d3.event.pageY + 'px'))
+                                d3.select(this).style('opacity', 0.5)
+                              })
+                            .on('mouseout', function(d) {
+                                tooltip.transition()
+                                  .duration(1000)
+                                  .style('opacity', 0)
+                                d3.select(this).style('opacity', 1)
+                              })
                          
                     var hScale =  d3.scaleBand()
                     .domain(["Life expectancy", "Years of education"])

@@ -26,6 +26,12 @@ window.onload = function() {
         }
 
         console.log(life)
+        d3.select("body")
+            .append("p").text("Income per Household")
+            .append("p").text("By: Wiebe Jelsma (12468223)")
+            .append("p").text("Hover over a land to see its average household \
+             income, click it to see its average life expectancy and the total \
+             amount of years of education the residents have on average")
           
   
         var format = d3.format(",");

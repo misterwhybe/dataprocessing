@@ -1,9 +1,8 @@
 <!-- Wiebe Jelsma 12468223 -->
 <!DOCTYPE html>
 <meta charset="utf-8">
-<style>
+<title>Income per household</title>
 
-</style>
 <body>
 <script type="text/javascript" src="https://d3js.org/d3.v5.min.js"></script>
 <script src="http://d3js.org/queue.v1.min.js"></script>
@@ -13,5 +12,14 @@
 <script type="text/javascript" src="linked_views.js"> </script>
 <div id="map"></div>
 <div id="chart"></div>
+<button onclick="myFunction()">Get dataset</button>
+<p id="demo"></p>
+<script>
+function myFunction() {
+    var str = "Go to OECD Dataset";
+    var result = str.link("https://stats.oecd.org/Index.aspx?DataSetCode=BLI");
+    document.getElementById("demo").innerHTML = result;
+}
+</script>
 </body>
 </html>

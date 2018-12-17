@@ -23,15 +23,24 @@ window.onload = function() {
         for(i=78; i<117;i++){
             life.push(Object.values(University.Value)[i])   
         }
+
         // Give a littlebit of information about the webpage
         d3.select("body")
             .append("p").text("Hover over a land to see its adjusted net \
-            average household income, click it to see its average life \
-            expectancy and the total amount of years of education the \
-            residents have on average. If a country without data \
+            average household income, click to see its average life \
+            expectancy and the amount of years of education the \
+            residents have on average. ")
+            .append("p").text("If a country without data \
             is clicked, the average of the OECD will be shown. Move cursor \
-             over the barchart to see its values!")
-            .append("p").text("By: Wiebe Jelsma (12468223)")
+            over the barchart to see its values!")
+            .append("p").text("If you want to see the data for yourself, \
+            click the Get dataset button!")
+            .append("p").text("For this assignment, D3 is used.")
+            .append("p").text("By: Wiebe Jelsma")
+            .append("p").text("Studentnummer: 12468223")
+            .append("p").text("Minor Programmeren, Data Processing")
+            .append("p").text("17-12-2018")
+
           
   
         var format = d3.format(",");
@@ -48,7 +57,7 @@ window.onload = function() {
                     // Show household income if someone hovers over the country
                         return "<strong>Country: </strong><span class= \
                         'details'>" + d.properties.name + "<br></span>" 
-                        +"<strong>Household net income: </strong><span \
+                        +"<strong>Household net income in $:  </strong><span \
                         class='details'>" + Income + "<br></span>"
                     })
 
@@ -160,7 +169,7 @@ window.onload = function() {
             });
             // Make legend
             legend = svg.selectAll("#map")
-                .data([5000,10000,15000,20000,25000,30000,35000,40000,"NAN"])
+                .data([5000,10000,15000,20000,25000,30000,35000,40000,"No data"])
                 .enter()
                 .append("g")
                 .attr("class", ".legend")

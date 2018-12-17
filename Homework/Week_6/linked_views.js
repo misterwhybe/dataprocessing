@@ -122,6 +122,7 @@ window.onload = function() {
                 if(countries.includes(d.properties.name)){
                     var place = countries.indexOf(d.properties.name)
                     Life = life[place]
+                    console.log(Life)
                     Education = educationYears[place]
                     data.push({name: d.properties.name, value: Life},{name: d.properties.name, value: Education})
 
@@ -166,9 +167,9 @@ window.onload = function() {
               .attr("d", path);
         function make_barchart(data){
 
-                var margin = {top: 20, right: 20, bottom: 30, left: 20};
+                var margin = {top: 20, right: 25, bottom: 10, left: 25};
                 var width = 300 - margin.left - margin.right;
-                var height = 150 - margin.top - margin.bottom;
+                var height = 200 - margin.top - margin.bottom;
       
                 var padding = 20;
       
@@ -193,11 +194,14 @@ window.onload = function() {
 
                 var yScale = d3.scaleLinear()
                     .domain([0,100])
-                    .range([height + margin.op, margin.top])
+                    .range([height + margin.bottom , margin.bottom])
+
+                var yAxis = d3.axisLeft(yScale);
+
 
                 var xScale = d3.scaleBand()
                     .domain(d3.range(0,2))
-                    .range([margin.right, width])
+                    .range([margin.right, 200])
 
                     barchart.append('g')
                             .selectAll("rect")
@@ -206,13 +210,13 @@ window.onload = function() {
                             .append("rect")
                             .attr("width", width / 5)
                             .attr("height", function(d){
-                            return d.value * 15;
+                            return height - yScale(d.value) ;
                             })
                             .attr("x", function(d, i) {
                             return xScale(i)
                             })
                             .attr("y", function(d){
-                            return height - (d.value);
+                            return yScale(d.value);
                             })
                             .attr("fill", function(d,i) {
                                 return colors(i);
@@ -220,7 +224,7 @@ window.onload = function() {
                          
                     var hScale =  d3.scaleBand()
                     .domain(["Life expectancy", "Years of education"])
-                    .range([0,200])
+                    .range([margin.left,200])
         
                     // make axis
                     barchart.append("g")
@@ -228,9 +232,16 @@ window.onload = function() {
                             .call(d3.axisBottom(hScale).ticks(2))
                             .selectAll("text")
                             .style("text-anchor", "end")
-                            .attr("dx", "-.8em")
-                            .attr("dy", ".30em")
+                            .attr("x", -10)
+                            .attr("y", 20)
                             .attr("transform", "rotate(-65)");
+
+                    barchart.append("g")
+                            .attr("class", "axis")
+                            .attr("transform", "translate("+[margin.left, 0]+")")
+                            .call(yAxis)
+                            
+
       
                     barchart.append("text")
                         .data(data)

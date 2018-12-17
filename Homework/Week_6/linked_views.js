@@ -56,7 +56,7 @@ window.onload = function() {
   
         var margin = {top: 20, right: 0, bottom: 0, left: 50},
                     width = 960 - margin.left - margin.right,
-                    height = 650 - margin.top - margin.bottom;
+                    height = 600 - margin.top - margin.bottom;
         var padding = 20;
   
         var color = d3.scaleThreshold()

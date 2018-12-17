@@ -30,7 +30,8 @@ window.onload = function() {
             .append("p").text("Hover over a land to see its adjusted net \
             average household income, click it to see its average life \
             expectancy and the total amount of years of education the \
-            residents have on average")
+            residents have on average. \n If a country without data \
+            is clicked, the average of the OECD will be shown")
             .append("p").text("By: Wiebe Jelsma (12468223)")
           
   
@@ -130,14 +131,16 @@ window.onload = function() {
                     Life = life[place]
                     console.log(Life)
                     Education = educationYears[place]
-                    data.push({name: d.properties.name, value: Life},{name: d.properties.name, value: Education})
+                    data.push({name: d.properties.name, value: Life},{name: 
+                        d.properties.name, value: Education})
 
                     make_barchart(data)
                 }
                 else{
                     Life = life[life.length - 1]
-                    Education = education[education.length - 1]
-                    data.push({name: "OECD", value: Life}, {name: "OECD", value: Education})
+                    Education = educationYears[educationYears.length - 1]
+                    data.push({name: "Average of OECD", value: Life}, {name: 
+                        "Average of OECD", value: Education})
                     make_barchart(data)
                 }
 

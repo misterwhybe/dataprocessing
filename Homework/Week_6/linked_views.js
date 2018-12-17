@@ -168,7 +168,7 @@ window.onload = function() {
               .attr("d", path);
         function make_barchart(data){
 
-                var margin = {top: 20, right: 25, bottom: 20, left: 25};
+                var margin = {top: 15, right: 5, bottom: 60, left: 25};
                 var width = 500 - margin.left - margin.right;
                 var height = 400 - margin.top - margin.bottom;
       
@@ -190,19 +190,19 @@ window.onload = function() {
 
                 var barchart = d3.select("#chart")
                                 .append("svg")
-                                .attr("width", width )
-                                .attr("height", height );
+                                .attr("width", width + margin.left + margin.right)
+                                .attr("height", height + margin.top + margin.bottom);
 
                 var yScale = d3.scaleLinear()
                     .domain([0,100])
-                    .range([height + margin.bottom , margin.bottom])
+                    .range([height , margin.bottom])
 
                 var yAxis = d3.axisLeft(yScale);
 
 
                 var xScale = d3.scaleBand()
                     .domain(d3.range(0,2))
-                    .range([margin.right, 200])
+                    .range([margin.right, width - margin.right - margin.left])
 
                     barchart.append('g')
                             .selectAll("rect")
@@ -214,7 +214,7 @@ window.onload = function() {
                             return height - yScale(d.value) ;
                             })
                             .attr("x", function(d, i) {
-                            return xScale(i)
+                            return xScale(i) + margin.left
                             })
                             .attr("y", function(d){
                             return yScale(d.value);
@@ -225,30 +225,25 @@ window.onload = function() {
                          
                     var hScale =  d3.scaleBand()
                     .domain(["Life expectancy", "Years of education"])
-                    .range([margin.left,200])
+                    .range([margin.left, width - margin.right - margin.left])
         
                     // make axis
                     barchart.append("g")
                             .attr("class", "axis")
-                            .attr("transform", "translate(0, 360)")
+                            .attr("transform", "translate("+[0, height]+")")
                             .call(d3.axisBottom(hScale).ticks(2))
                             .selectAll("text")
                             .style("text-anchor", "end")
-                            .attr("x", -10)
-                            .attr("y", 20)
-                            .attr("transform", "rotate(-65)");
 
                     barchart.append("g")
                             .attr("class", "axis")
                             .attr("transform", "translate("+[margin.left, 0]+")")
                             .call(yAxis)
-                            
-
-      
+                
                     barchart.append("text")
                         .data(data)
-                        .attr("x", 150)
-                        .attr("y", 15)
+                        .attr("x", width / 2)
+                        .attr("y", margin.top)
                         .attr("text-anchor", "middle")
                         .style("font-family", "sans-sherif")
                         .style("font-size", "20px")

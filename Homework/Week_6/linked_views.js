@@ -48,14 +48,14 @@ window.onload = function() {
                     })
 
   
-        var margin = {top: 0, right: 0, bottom: 0, left: 50},
+        var margin = {top: 20, right: 0, bottom: 0, left: 50},
                     width = 960 - margin.left - margin.right,
                     height = 650 - margin.top - margin.bottom;
         var padding = 20;
   
         var color = d3.scaleThreshold()
-            .domain([5000,10000,15000,20000,25000,30000,35000,40000,45000,])
-            .range(["rgb(247,251,255)", "rgb(222,235,247)", "rgb(198,219,239)", "rgb(158,202,225)", "rgb(107,174,214)", "rgb(66,146,198)","rgb(33,113,181)","rgb(8,81,156)","black"]);
+            .domain([5000,10000,15000,20000,25000,30000,35000,40000,"NAN",])
+            .range(["#f7fcf5", "#e5f5e0", "#c7e9c0", "#a1d99b", "#74c476", "#41ab5d","#238b45","#005a32","black"]);
   
         var path = d3.geoPath();
   
@@ -140,7 +140,7 @@ window.onload = function() {
             });
             // make legend
             legend = svg.selectAll("#map")
-                .data([5000,10000,15000,20000,25000,30000,35000,40000,"No value"])
+                .data([5000,10000,15000,20000,25000,30000,35000,40000,"NAN"])
                 .enter()
                 .append("g")
                 .attr("class", ".legend")
@@ -148,15 +148,16 @@ window.onload = function() {
 
             legend.append("rect")
                 .attr("x", width - 35)
-                .attr("y", 0)
+                .attr("y", 5)
                 .attr("width", 32)
-                .attr("height", 20)
+                .attr("height", margin.top)
                 .style("fill", d => color(d))
 
                 // add text to legend
             legend.append("text")
-                    .attr("x", width - 65)
+                    .attr("x", width - 85)
                     .attr("y", 20)
+                    .style("color", "#FFF")
                     .text(function(d){
                     return d;
                     })
@@ -167,9 +168,9 @@ window.onload = function() {
               .attr("d", path);
         function make_barchart(data){
 
-                var margin = {top: 20, right: 25, bottom: 10, left: 25};
-                var width = 300 - margin.left - margin.right;
-                var height = 200 - margin.top - margin.bottom;
+                var margin = {top: 20, right: 25, bottom: 20, left: 25};
+                var width = 500 - margin.left - margin.right;
+                var height = 400 - margin.top - margin.bottom;
       
                 var padding = 20;
       
@@ -229,6 +230,7 @@ window.onload = function() {
                     // make axis
                     barchart.append("g")
                             .attr("class", "axis")
+                            .attr("transform", "translate(0, 360)")
                             .call(d3.axisBottom(hScale).ticks(2))
                             .selectAll("text")
                             .style("text-anchor", "end")

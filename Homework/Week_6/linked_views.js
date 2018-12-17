@@ -6,7 +6,7 @@ window.onload = function() {
     var requests = [d3.json(university), d3.json(data)];
   
     Promise.all(requests).then(function(response) {
-        // load everything and put the right values in the right lists
+        // Load everything and put the right values in the right lists
         var countries = []
         var educationYears = []
         var income = []
@@ -28,7 +28,7 @@ window.onload = function() {
             .append("p").text("Hover over a land to see its adjusted net \
             average household income, click it to see its average life \
             expectancy and the total amount of years of education the \
-            residents have on average. \n If a country without data \
+            residents have on average. If a country without data \
             is clicked, the average of the OECD will be shown. Move cursor \
              over the barchart to see its values!")
             .append("p").text("By: Wiebe Jelsma (12468223)")

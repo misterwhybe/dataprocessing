@@ -81,7 +81,8 @@ window.onload = function() {
   
         function ready(data, University) {
            
-
+        
+  
         svg.append("g")
             .attr("class", "countries")
             .selectAll("path")
@@ -95,7 +96,7 @@ window.onload = function() {
                     Income = income[place] 
                     return (color(Income));
                 }
-                    return "black"
+                    return "white"
                 })  
                     
             .style('stroke-width', 1.5)
@@ -136,28 +137,6 @@ window.onload = function() {
                 .style("stroke","white")
                 .style("stroke-width",0.3);
             });
-            // make legend
-            legend = svg.selectAll("#map")
-                .data([5000,10000,15000,20000,25000,30000,35000,40000,"No value"])
-                .enter()
-                .append("g")
-                .attr("class", ".legend")
-                .attr("transform", function(d, i) { return "translate(0," + i * 20 + ")"; });
-
-            legend.append("rect")
-                .attr("x", width - 35)
-                .attr("y", 0)
-                .attr("width", 32)
-                .attr("height", 20)
-                .style("fill", d => color(d))
-
-                // add text to legend
-            legend.append("text")
-                    .attr("x", width - 65)
-                    .attr("y", 20)
-                    .text(function(d){
-                    return d;
-                    })
   
           svg.append("path")
               .datum(topojson.mesh(data.features, function(a, b) { return a.name !== b.name; }))
@@ -214,11 +193,13 @@ window.onload = function() {
                             return height - (d.value);
                             })
                             .attr("fill", function(d,i) {
-                                return colors(i);
+                                // return colors(i);
+                                return "red"
                             })
                          
                     var hScale =  d3.scaleBand()
                     .domain(["Life expectancy", "Years of education"])
+                    // .range([margin.right, width])
                     .range([0,200])
         
                     // make axis
@@ -243,8 +224,12 @@ window.onload = function() {
                             return d.name;
                         });
             }
-            };
-
+      
+              };
+      
+        
+  
+  
       }).catch(function(e){
           throw(e);
     });

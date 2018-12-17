@@ -1,6 +1,12 @@
-// Wiebe Jelsma (12468223)
+/*  
+Wiebe Jelsma (12468223)
+Minor programmeren, Data processing
+17-12-2018
+*/
+
 window.onload = function() {
     // Load the data
+    // Made use of this blog: http://bl.ocks.org/micahstubbs/8e15870eb432a21f0bc4d3d527b2d14f
     var university = "data.json"
     var data = "world_countries.json"
     var requests = [d3.json(university), d3.json(data)];
@@ -25,25 +31,24 @@ window.onload = function() {
         }
 
         // Give a littlebit of information about the webpage
+        
         d3.select("body")
-            .append("p").text("Hover over a land to see its adjusted net \
-            average household income, click to see its average life \
-            expectancy and the amount of years of education the \
-            residents have on average. ")
-            .append("p").text("If a country without data \
-            is clicked, the average of the OECD will be shown. Move cursor \
-            over the barchart to see its values!")
+            .append("p").text("When you hover over the map you can see the \
+            countries and the adjusted net household income.")
+            .append("p").text("When a country is clicked, a bar chart will \
+            open on the right.")
+            .append("p").text("Here, you can see the average life expectancy \
+            and the years of education the residents have on average")
+            .append("p").text("If a country without data is clicked, the \
+            average of the OECD will be shown. Move cursor \
+                over the barchart to see its values!")
             .append("p").text("If you want to see the data for yourself, \
-            click the Get dataset button!")
+                click the Get dataset button!")
             .append("p").text("For this assignment, D3 is used.")
             .append("p").text("By: Wiebe Jelsma")
             .append("p").text("Studentnummer: 12468223")
             .append("p").text("Minor Programmeren, Data Processing")
             .append("p").text("17-12-2018")
-
-          
-  
-        var format = d3.format(",");
   
         // Set tooltips
         var tip = d3.tip()
@@ -65,7 +70,7 @@ window.onload = function() {
         var margin = {top: 20, right: 0, bottom: 0, left: 50},
                     width = 960 - margin.left - margin.right,
                     height = 650 - margin.top - margin.bottom;
-        var padding = 20;
+        var padding = 35;
         // Specify which income gets which color. The color is from 
         // Colorbrewer, so it is colorblind friendly 
         var color = d3.scaleThreshold()
@@ -90,9 +95,7 @@ window.onload = function() {
         var path = d3.geoPath().projection(projection);
         var t = d3.transition()
                   .duration(750);
-  
-        var click;
-  
+    
         svg.call(tip);
         ready(data, University);
   
@@ -140,7 +143,6 @@ window.onload = function() {
                 if(countries.includes(d.properties.name)){
                     var place = countries.indexOf(d.properties.name)
                     Life = life[place]
-                    console.log(Life)
                     Education = educationYears[place]
                     // Put all data in a dictionary, give it to the barchart
                     data.push({name: d.properties.name, value: Life},{name: 
@@ -156,7 +158,6 @@ window.onload = function() {
                         "Average of OECD", value: Education})
                     make_barchart(data)
                 }
-
                 })
             // If the cursor moves away from the country, stop showing data 
             .on('mouseout', function(d){
@@ -176,16 +177,16 @@ window.onload = function() {
                 .attr("transform", function(d, i) { return "translate(0," + i * 20 + ")"; });
             // Fill in all colors of the legend
             legend.append("rect")
-                .attr("x", width - 35)
+                .attr("x", width - padding)
                 .attr("y", 5)
-                .attr("width", 32)
+                .attr("width", padding)
                 .attr("height", margin.top)
                 .style("fill", d => color(d))
 
                 // Add text to legend
             legend.append("text")
                     .attr("x", width - 85)
-                    .attr("y", 20)
+                    .attr("y", margin.top)
                     .style("color", "#FFF")
                     .text(function(d){
                     return d;
@@ -235,7 +236,7 @@ window.onload = function() {
                             .data(data)
                             .enter()
                             .append("rect")
-                            .attr("width", width / 5)
+                            .attr("width", width / margin.right)
                             .attr("height", function(d){
                             return height - yScale(d.value) ;
                             })

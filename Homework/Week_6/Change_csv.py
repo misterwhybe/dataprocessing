@@ -1,3 +1,8 @@
+"""
+Wiebe Jelsma (12468223)
+Minor programmeren, Data processing
+17-12-2018
+"""
 import pandas as pd 
 
 # def load_csv(self):

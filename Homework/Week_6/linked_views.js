@@ -54,12 +54,13 @@ window.onload = function() {
         var padding = 20;
   
         var color = d3.scaleThreshold()
-            .domain([5000,10000,15000,20000,25000,30000,35000,40000,45000,50000])
-            .range(["rgb(247,251,255)", "rgb(222,235,247)", "rgb(198,219,239)", "rgb(158,202,225)", "rgb(107,174,214)", "rgb(66,146,198)","rgb(33,113,181)","rgb(8,81,156)","rgb(8,48,107)","rgb(3,19,43)"]);
+            .domain([5000,10000,15000,20000,25000,30000,35000,40000,45000,])
+            .range(["rgb(247,251,255)", "rgb(222,235,247)", "rgb(198,219,239)", "rgb(158,202,225)", "rgb(107,174,214)", "rgb(66,146,198)","rgb(33,113,181)","rgb(8,81,156)","black"]);
   
         var path = d3.geoPath();
   
-        var svg = d3.select("#map").append("svg")
+        var svg = d3.select("#map")
+                    .append("svg")
                     .attr("width", width)
                     .attr("height", height)
                     .style("fill", "green")
@@ -233,8 +234,8 @@ window.onload = function() {
       
                     barchart.append("text")
                         .data(data)
-                        .attr("x", 60)
-                        .attr("y", 35)
+                        .attr("x", 150)
+                        .attr("y", 15)
                         .attr("text-anchor", "middle")
                         .style("font-family", "sans-sherif")
                         .style("font-size", "20px")

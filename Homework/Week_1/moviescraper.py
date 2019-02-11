@@ -34,41 +34,48 @@ def extract_movies(dom):
     Runtime = []
     
     # get list of title of movies
-    for titles in dom.find_all("h3"):
-        for new_title in titles.find_all("a"):
-            movie_title = new_title.contents[0]
-            Title.append(movie_title)
+    def Titles():
+        for titles in dom.find_all("h3"):
+            for new_title in titles.find_all("a"):
+                movie_title = new_title.contents[0]
+                Title.append(movie_title)
+        return Title
 
     # get list of rating of movies
-    for ratingz in dom.find_all("span", "value"):
-        movie_rating = ratingz.contents[0]
-        movie_rating = float(movie_rating)
-        Rating.append(movie_rating)
-        print(movie_rating)
+    def Ratings():
+        for ratingz in dom.find_all("span", "value"):
+            movie_rating = ratingz.contents[0]
+            movie_rating = float(movie_rating)
+            Rating.append(movie_rating)
+        return Rating
 
     # get list of the years the movie are released
-    for years in dom.find_all("span", class_ ="lister-item-year text-muted unbold"):
-        year = years.contents[0]
-        Year.append(year)
+    def Years():
+        for years in dom.find_all("span", class_ ="lister-item-year text-muted unbold"):
+            year = years.contents[0]
+            Year.append(year[-5:-1])
+        return Year
+
     
     # get list of all actors per movie, this one is difficult! 
+    
     for actors in dom.find_all("div", class_="lister-item-content"):
         Actorz = []
         for all_actor in actors.find_all("a"):
             if "_st" in all_actor.get("href"):
                 Actorz.append(all_actor.get_text())  
         Actors.append(Actorz)  
+    
 
         # get list of amount of minutes a movie is
         for time in actors.find_all("span", class_= "runtime"):
             runtime = time.contents[0]
             Runtime.append(runtime)
+            Runtime = [s.replace(' min', '') for s in Runtime]
        
-
-    # ADD YOUR CODE HERE TO EXTRACT THE ABOVE INFORMATION ABOUT THE
-    # HIGHEST RATED MOVIES
-    # NOTE: FOR THIS EXERCISE YOU ARE ALLOWED (BUT NOT REQUIRED) TO IGNORE
-    # UNICODE CHARACTERS AND SIMPLY LEAVE THEM OUT OF THE OUTPUT.
+    Titles()
+    Ratings()
+    Years()
 
     return(Title, Rating, Year, Actors, Runtime)   # REPLACE THIS LINE AS WELL IF APPROPRIATE
 
@@ -82,15 +89,15 @@ def save_csv(outfile, movies):
     
     # ADD SOME CODE OF YOURSELF HERE TO WRITE THE MOVIES TO DISK
     # get all the lists back
-    a = movies[0]
-    b = movies[1]
-    c = movies[2]
-    d = movies[3]
-    e = movies[4]
+    title = movies[0]
+    rating = movies[1]
+    year = movies[2]
+    actors = movies[3]
+    runtime = movies[4]
     
     # write the rows in an csv file
-    for title in range(50):
-        writer.writerow([a[title], b[title], c[title], d[title], e[title]])
+    for row in range(50):
+        writer.writerow([title[row], rating[row], year[row], actors[row], runtime[row]])
     
          
 def simple_get(url):

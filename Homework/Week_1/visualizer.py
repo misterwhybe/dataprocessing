@@ -4,11 +4,11 @@
 """
 This script visualizes data obtained from a .csv file
 """
-def visualize():
-    import csv
-    import matplotlib.pyplot as plt
-    from statistics import mean
+import csv
+import matplotlib.pyplot as plt
+from statistics import mean
 
+def visualize():
     INPUT_CSV = "movies.csv"
     START = 2008
     END = 2018

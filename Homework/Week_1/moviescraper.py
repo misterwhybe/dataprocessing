@@ -32,7 +32,6 @@ def extract_movies(dom):
     Year = []
     Actors = []
     Runtime = []
-    
     # get list of title of movies
     def Titles():
         for titles in dom.find_all("h3"):
@@ -56,9 +55,7 @@ def extract_movies(dom):
             Year.append(year[-5:-1])
         return Year
 
-    
     # get list of all actors per movie, this one is difficult! 
-    
     for actors in dom.find_all("div", class_="lister-item-content"):
         Actorz = []
         for all_actor in actors.find_all("a"):
@@ -76,7 +73,6 @@ def extract_movies(dom):
     Titles()
     Ratings()
     Years()
-
     return(Title, Rating, Year, Actors, Runtime)   # REPLACE THIS LINE AS WELL IF APPROPRIATE
 
 
@@ -98,8 +94,8 @@ def save_csv(outfile, movies):
     # write the rows in an csv file
     for row in range(50):
         writer.writerow([title[row], rating[row], year[row], actors[row], runtime[row]])
-    
-         
+
+
 def simple_get(url):
     """
     Attempts to get the content at `url` by making an HTTP GET request.

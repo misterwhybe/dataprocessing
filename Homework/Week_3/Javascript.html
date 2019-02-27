@@ -9,16 +9,16 @@
     </head>
     <body>
         <h1>
-            Linegraph of the public debt as percentage of Gross Domestic Product
+            Linegraph of the public debt as percentage of Gross Domestic Product of America
         </h1>
         <h3>
-            By: Wiebe Jelsma
+            Data is found on https://fred.stlouisfed.org/series/GFDEGDQ188S
         </h3>
         <h4>
-            data is published on https://fred.stlouisfed.org/series/GFDEGDQ188S
+            Wiebe Jelsma
         </h4>
 
-        <canvas id="line" width="600" height="400">
+        <canvas id="line" width="600" height="500">
         </canvas> 
         <script>
 
@@ -36,39 +36,51 @@
                     for(i = 16; i < 120; i = i+4){
                         values.push(Object.values(data)[1][i])
                     }
+                    // console.log(Object.values(data))
 
                     // take 17th point, then add 4 to that so we start at 1970
                     // and add one year. Slice so we only have the year
                     for(i = 16; i < 120; i = i+4){
-                        dates.push(Object.values(data)[0][i].slice(0,4)) 
+                        dates.push(Object.values(data)[0][i].slice(0,4))
                     }
-                    var transform = createTransform([0, 600], [0, 380])
+                    // create different transform functions
+                    var transformDate = createTransform([1970, 1990], [10, 600])
+                    var transformValue = createTransform([30, 66], [50, 500])
 
                     var canvas = document.getElementById('line');
                     var ctx = canvas.getContext("2d")
-                    ctx.fillText("Years", 300, 400);
-                    ctx.fillText("Debt % of GDP", 10, 10);
-                    ctx.fillText("1970", 30, 380)
-                    ctx.fillText("1985", 530, 380)
-                    ctx.transform(1, 0, 0, -1, 0, canvas.height)
+                    ctx.fillText("Years", 300, 480);
+                    ctx.fillText("Debt % of GDP", 15, 10);
+                    // get years on xAxis
+                    var year = 1970;
+                    for(var i = 0; i<21; i++){
+                        ctx.fillText(year, 30 * i, 495)
+                        year +=1
+                    };
+                    // get values at yAxis
+                    var percentage = 100;
+                    for(var i = 0; i<10; i++){
+                        ctx.fillText(percentage, 0, i*50)
+                        percentage -=10
+                    };
+
+                    ctx.transform(1, 0, 0, -1, 0, canvas.height);
                     // get x-axis
                     ctx.beginPath()
-                    ctx.moveTo(0, 0)
-                    ctx.lineTo(600,0)
+                    ctx.moveTo(10, 15)
+                    ctx.lineTo(600, 15)
                     ctx.strokeStyle = "red"
                     ctx.stroke()
                     // get y-axis
                     ctx.beginPath()
-                    ctx.moveTo(0, 0)
-                    ctx.lineTo(0, 400)
+                    ctx.moveTo(10, 15)
+                    ctx.lineTo(10, 550)
                     ctx.stroke()
-                    
+
                     // make line graph
-                    
                     ctx.beginPath();
-                    ctx.moveTo(50,10);
                     for(i = 0; i < 19; i++){
-                        ctx.lineTo(transform(dates[i]),transform(values[i]));
+                        ctx.lineTo(transformDate(dates[i]),transformValue(values[i]));
                     }
                     ctx.strokeStyle = "blue"
                     ctx.stroke();
@@ -76,7 +88,6 @@
             }
             txtFile.open("GET", fileName);
             txtFile.send();
-            console.log(values[3])
 
             function createTransform(domain, range){
                 // domain is a two-element array of the data bounds [domain_min, domain_max]
@@ -92,12 +103,12 @@
                 var range_max = range[1]
 
                 // formulas to calculate the alpha and the beta
-                    var alpha = (range_max - range_min) / (domain_max - domain_min)
+                var alpha = (range_max - range_min) / (domain_max - domain_min)
                 var beta = range_max - alpha * domain_max
 
                 // returns the function for the linear transformation (y= a * x + b)
                 return function(x){
-                return alpha * x + beta;
+                    return alpha * x + beta;
                 }
             }
         </script>

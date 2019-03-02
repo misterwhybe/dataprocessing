@@ -4,21 +4,49 @@
         <meta charset="utf-8">
         <title>Renewable Energy</title>
         <script type="text/javascript" src="https://d3js.org/d3.v5.min.js"></script>
+        <script src="d3-tip.js"></script>
         <style type = "text/css">
-            .axis path,
-            .axis line {
-                fill: none;
-                stroke: black;
-                shape-rendering: crispEdges;
+            
+
+            .x.axis path {
+            display: none;
             }
-            .axis text {
-                font-family: sans-serif;
-                font-size: 11px;
+
+            .d3-tip {
+            line-height: 1;
+            font-weight: bold;
+            padding: 12px;
+            background: rgba(0, 0, 0, 0.8);
+            color: #fff;
+            border-radius: 2px;
+            }
+
+            /* Creates a small triangle extender for the tooltip */
+            .d3-tip:after {
+            box-sizing: border-box;
+            display: inline;
+            font-size: 10px;
+            width: 100%;
+            line-height: 1;
+            color: rgba(0, 0, 0, 0.8);
+            content: "\25BC";
+            position: absolute;
+            text-align: center;
+            }
+
+            /* Style northward tooltips differently */
+            .d3-tip.n:after {
+            margin: -1px 0 0 0;
+            top: 100%;
+            left: 0;
+            }
+            rect:hover {
+                fill:grey;
             }
         </style>
   </head>
   <body>
-      <div id = "bar"></div>
+    <div id = "bar"></div>
     <script type="text/javascript">
         d3.select("body")
             .append("p").text("Renewable energy of Australia")
@@ -34,67 +62,83 @@
                 Dates.push(Object.values(data)[0][i])
                 Values.push(Object.values(data)[1][i])
             }            
+        margin = {top: 5, right: 10, bottom: 40, left: 60}
+        var height = 650 - margin.top - margin.bottom;
+        var width = 1200 - margin.left - margin.right;
+        var barWidth = 13;
+        var colourScale = [4000,5000,6000,7000,8000,9000]
+        var color = d3.scaleOrdinal()
+            .domain(colourScale)
+            .range(["##ffffcc", "#d9f0a3", "#addd8e", "#78c679", "#31a354", 
+                "#006837"]);
 
-            margin = {top: 5, right: 10, bottom: 40, left: 60}
-            var height = 650 - margin.top - margin.bottom;
-            var width = 1250 - margin.left - margin.right;
-            var barWidth = 15;
+        var xScale = d3.scaleLinear()
+            .domain([1960, 2016])
+            .range([margin.left, width - margin.left]);
+        var yScale = d3.scaleLinear()
+            .domain([0, 9000])
+            .range([height - margin.bottom, 0]);
 
-            var xScale = d3.scaleLinear()
-                .domain([1960, d3.max(Dates, function (d) {
-                    return d;})])
-                .range([margin.left, width - margin.left - margin.right]);
-            var yScale = d3.scaleLinear()
-                .domain([0, d3.max(Values, function (d) {
-                    return d;})])
-                .range([height - margin.bottom ,margin.bottom]);
+        var xAxis = d3.axisBottom(xScale)                                          
+        var yAxis = d3.axisLeft(yScale);
+        var tip = d3.tip()
+                    .style("fill", "blue")
+                    .attr('class', 'd3-tip')
+                    .offset([-10, 0])
+                    .html(function(d) {
+                        return "<strong>Energy usage:</strong> <span style='color:red'>" + d + "</span>";
+                    })
 
-            var xAxis = d3.axisBottom(xScale)                                          
-            var yAxis = d3.axisLeft(yScale);
-
-            var svg = d3.select("body")
-                .append("svg")
-                .attr("width", width + margin.left)
-                .attr("height", height + margin.bottom)
-                .style("background", "lightyellow")
-                .append("g")
-            svg.selectAll("rect")
-                .data(Values)
-                .enter()
-                .append("rect")
-                .style("fill", "lightgreen")
-                .attr("width", barWidth)
-                .attr("height", function(d){
-                    return yScale(d);
-                })
-
-                .attr("x", function(d, i) {
-                    return margin.left + i * (width / Dates.length);
-                })
-                .attr("y", function(d){
-                    return yScale(d)
-                })
-                .attr("width", width / Dates.length)
-                .attr("height", function(d){
-                    return height - yScale(d) 
-                })
-            // try to make x-axis
-            svg.append("g")
-                .attr("class", "axis") 
-                .attr("transform", "translate(0," + height + ")")
-                .call(xAxis);
-            // try to make y-axis
-            svg.append("g")
-                .attr("class", "axis")
-                .attr("transform", "translate("+[margin.left, margin.bottom]+")")
-                .call(yAxis)
-            // try to name the y-axis, was still working on it
-            svg.append("text")
-                .attr("transform", "rotate(-90)")
-                .attr("y", margin.bottom)
-                .style("text-anchor", "end")
-                .text("Renewable Energy");
-        });
+        var svg = d3.select("body")
+            .append("svg")
+            .attr("width", width + margin.left)
+            .attr("height", height + margin.bottom)
+            .style("background", "#fff7bc")
+            .append("g")
+        svg.call(tip);
+        svg.selectAll("rect")
+            .data(Values)
+            .enter()
+            .append("rect")
+            .attr("fill", function (d) {
+                return color(d)})
+            .attr("x", function(d, i) {
+                return margin.left + i * ((width - margin.left - margin.bottom - margin.right) / Dates.length);
+            })
+            .attr("y", function(d){
+                return yScale(d) + margin.bottom
+            })
+            .attr("width", barWidth)
+            .attr("height", function(d){
+                return height - yScale(d) -margin.bottom
+            })
+            .on('mouseover', tip.show)
+            .on('mouseout', tip.hide)
+        // try to make x-axis
+        svg.append("g")
+            .attr("class", "axis") 
+            .attr("transform", "translate(0," + height + ")")
+            .call(xAxis
+                .ticks(20));
+        // try to make y-axis
+        svg.append("g")
+            .attr("class", "axis")
+            .attr("transform", "translate("+[margin.left, margin.bottom]+")")
+            .call(yAxis)
+        // try to name the y-axis
+        svg.append("text")
+            .attr("y", margin.bottom - 20)
+            .attr("x", margin.left - 350)
+            .style("text-anchor", "end")
+            .attr("transform", "rotate(-90)")
+            .text("Renewable Energy");
+        // try to name the x-axis
+        svg.append("text")
+            .attr("x", width/2)
+            .attr("y", height + 30)
+            .style("text-anchor", "end")
+            .text("Year");
+    });
     </script>
   </body>
 </html>

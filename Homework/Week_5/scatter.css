@@ -1,1 +1,22 @@
 /* Wiebe Jelsma 12468223 */
+body {
+    margin: 0px;
+    overflow: hidden;
+  }
+  
+  circle {
+    opacity: 0.6;
+  }
+  
+  text {
+    font-family: sans-serif;
+  }
+  
+  .tick text {
+    font-size: 1em;
+    fill: #635F5D;
+  }
+  
+  .tick line {
+    stroke: #C0C0BB;
+  }

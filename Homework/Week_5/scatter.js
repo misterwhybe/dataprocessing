@@ -12,55 +12,56 @@ window.onload = function() {
     Promise.all(requests).then(function(response) {
         womenInScience = transformResponse(response[0])
         consConf = transformResponse(response[1])
-        missing =  [10, 12, 14, 16, 28, 30, 46]        
-        // get data of women in science
-        for(i=0; i<47; i++){
-            women.push(womenInScience[i].datapoint)
-            women_years.push(womenInScience[i].time)
 
-        }
-        // add None-values at places where no data is found
-        for(i=0; i<missing.length; i++){
-            women.splice(missing[i], 0, "None")
-        }
-        // get data for consumer satisfaction
-        for(i=0; i<54; i++){
-            consumers.push(consConf[i].datapoint)
-        }
-        // add 2 datasets together, make arrays within arrat
-        Dataset = []
-        Temp = []
-        for(i=0; i<54; i++){
-            Temp = [consumers[i], women[i]]
-            Dataset.push(Temp)
-        }
-        Data=[]
-        // get rid of arrays with none values
-        for(i=0; i<54; i++){
-            if(Dataset[i][1] !== "None"){
-                Data.push(Dataset[i])
+        function data(womenInScience, consConf){
+            length = 54
+            missing =  [10, 12, 14, 16, 28, 30, 46]        
+            // get data of women in science
+            for(i=0; i<47; i++){
+                women.push(womenInScience[i].datapoint)
+                women_years.push(womenInScience[i].time)
+
             }
-        }  
-        // add text and tell where data comes from
-        d3.select("body")
-            .append("p").text("Scatterplot")
-            .append("p").text("By: Wiebe Jelsma (12468223)")
-            .append("p").text("The data of women in science can be found on:")
-            .append("p").text("https://stats.oecd.org/SDMX-JSON/data/MSTI_PUB/\
-            TH_WRXRS.FRA+DEU+KOR+NLD+PRT+GBR/all?startTime=2007&endTime=2015")
-            .append("p").text("The consumer Confidence data can be found on:")
-            .append("p").text(" https://stats.oecd.org/SDMX-JSON/data/HH_DASH/\
-            FRA+DEU+KOR+NLD+PRT+GBR.COCONF.A/all?startTime=2007&endTime=2015")       
+            // add None-values at places where no data is found
+            for(i=0; i<missing.length; i++){
+                women.splice(missing[i], 0, "None")
+            }
+            // get data for consumer satisfaction
+            for(i=0; i<length; i++){
+                consumers.push(consConf[i].datapoint)
+            }
+            // add 2 datasets together, make arrays within arrat
+            Dataset = []
+            Temp = []
+            for(i=0; i<length; i++){
+                Temp = [consumers[i], women[i]]
+                Dataset.push(Temp)
+            }
+            Data=[]
+            // get rid of arrays with none values
+            for(i=0; i<length; i++){
+                if(Dataset[i][1] !== "None"){
+                    Data.push(Dataset[i])
+                }
+            }
+        }
 
+        function program(Data){
             // set margin and padding
-            margin = {top: 10, right: 25, bottom: 30, left: 30}
+            margin = {top: 15, right: 25, bottom: 30, left: 30}
             var height = 400 - margin.top - margin.bottom;
-            var width = 750 - margin.left - margin.right;
+            var width = 800 - margin.left - margin.right;
             var padding = 40;
             // maybe use for legend
-            Colours = { "France":"red", "Germany":"purple", "Korea":"gray", 
-            "Netherlands":"orange", "Portugal":"green", "Great Britain":"blue"}
-            
+            var colour = ["red", "purple", "gray", "orange", "green",
+            "blue"]
+            countries = ["France", "Germany", "Korea", 
+            "Netherlands", "Portugal", "Great Britain"]
+            var colourScale = [0,9,14,23,30,39,47]
+            var color = d3.scaleQuantile()
+                .domain(colourScale)
+                .range(colour);
+
             // scale axis
             var xScale = d3.scaleLinear()
                     .domain([0, d3.max(Data, function(d) { return d[1]; })])
@@ -84,25 +85,8 @@ window.onload = function() {
                 .enter()
                 .append("circle")
                 // hard-code the different colours
-                .style("fill", function(d, i){
-                    if(i<9){
-                        return "red"
-                    }
-                    if(i > 8 & i< 14){
-                        return "purple"
-                    }
-                    if(i > 13 & i< 23){
-                        return "grey"
-                    }
-                    if(i > 22 &i< 30){
-                        return "orange"
-                    }
-                    if(i > 29 & i< 39){
-                        return "green"
-                    }
-                    if(i > 38 & i< 47){
-                        return "blue"
-                    }
+                .style("fill", function(d,i){
+                    return color(i)
                     
                 })
                 // get x and y values for circles
@@ -113,12 +97,15 @@ window.onload = function() {
                     return  yScale(d[0]);
                 })
                 .attr("r", 5)
-                
+            svg.append("text")
+                .attr("x", width / 3)
+                .attr("y", 15)
+                .text("Scatterplot of women in science and consumer satisfaction")
             // add x-axis
             svg.append("g")
                 .attr("class", "axis") 
                 .attr("transform", "translate("+ 
-                [ 0, height - margin.bottom - margin.top]+")")
+                [ 0, height - margin.bottom - margin.top + 5]+")")
                 .call(xAxis);
             // label x-axis
             svg.append("text")
@@ -136,18 +123,22 @@ window.onload = function() {
             svg.append("text")
                 .attr("transform", "rotate(-90)")
                 .attr("x", 0 - padding)
-                .attr("y", margin.top)
+                .attr("y", margin.top )
                 .style("text-anchor", "end")
                 .text("Consumer Satisfaction")
 
+            var colourScaleLegend = [0,1,2,3,4,5]
+            var colorLegend = d3.scaleLinear()
+                .domain(colourScaleLegend)
+                .range(colour);
             // add legend with colours and countries
             var legend = svg.selectAll(".legend")
-                .data(Object.keys(Colours))
+                .data(countries)
                 .enter()
                 .append("g")
                 .attr("class", "legend")
                 .attr("transform", function(d, i) {
-                  return "translate(0," + i * 20 + ")";
+                  return "translate(0," + (i * 20 + 6)+ ")";
                 });
               
               // draw legend colored rectangles
@@ -156,24 +147,7 @@ window.onload = function() {
                 .attr("width", 18)
                 .attr("height", 18)
                 .style("fill", function(d, i){
-                    if(i==0){
-                        return "red"
-                    }
-                    if(i==1){
-                        return "purple"
-                    }
-                    if(i==2){
-                        return "gray"
-                    }
-                    if(i==3){
-                        return "orange"
-                    }
-                    if(i==4){
-                        return "green"
-                    }
-                    if(i==5){
-                        return "blue"
-                    }
+                    return colorLegend(i)
                 })
             legend.append("text")
                 .attr("x", width - margin.top)
@@ -183,10 +157,21 @@ window.onload = function() {
                 .text(function(d) {
                   return d;
                 });
+        }  
+            
+    function title(){
+        // add text and tell where data comes from
+        d3.select("body")
+            .append("p").text("Welcome to my scatterplot!")
+            .append("p").text("The links to the data can be found in scatter.js.")
+            .append("p").text("Wiebe Jelsma (12468223)")
+        }
+    title()  
+    data(womenInScience, consConf)
+    program(Data)
     }).catch(function(e){
         throw(e);
-    });
-    
+    });   
 };
 function transformResponse(data){
 

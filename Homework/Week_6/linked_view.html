@@ -18,14 +18,11 @@ Minor programmeren, Data processing
 <script type="text/javascript" src="linked_views.js"> </script>
 <div id="map"></div>
 <div id="chart"></div>
-<button onclick="myFunction()">Get dataset</button>
-<p id="demo"></p>
-<script>
-function myFunction() {
-    var str = "Go to OECD Dataset";
-    var result = str.link("https://stats.oecd.org/Index.aspx?DataSetCode=BLI");
-    document.getElementById("demo").innerHTML = result;
-}
+<form>
+  <input type="button" value="Get dataset" 
+  onclick="window.location.href=
+    'https://stats.oecd.org/Index.aspx?DataSetCode=BLI'" />
+</form>
 </script>
 </body>
 </html>

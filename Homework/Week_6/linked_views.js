@@ -18,19 +18,18 @@ window.onload = function() {
         var life = []
         var University = response[0];
         var data = response[1];
-
         function getData(){
 
             // Load everything and put the right values in the right lists
-            
-            for(i=0;i<39;i++){
+            var limit = 39
+            for(i = 0; i < limit; i++){
                 countries.push(Object.values(University.Country)[i])
                 income.push(Object.values(University.Value)[i])
             }
-            for(i=39;i<78;i++){
+            for(i = limit; i < 2*limit ; i++){
                 educationYears.push(Object.values(University.Value)[i])
             }
-            for(i=78; i<117;i++){
+            for(i = 2*limit; i < 3*limit; i++){
                 life.push(Object.values(University.Value)[i])   
             }
         }
@@ -56,10 +55,12 @@ window.onload = function() {
                 width = 960 - margin.left - margin.right,
                 height = 650 - margin.top - margin.bottom;
             var padding = 35;
+            var allColours = [5000,10000,15000,20000,25000,30000,
+                35000,40000,"NAN"]
             // Specify which income gets which color. The color is from 
             // Colorbrewer, so it is colorblind friendly 
             var color = d3.scaleThreshold()
-            .domain([5000,10000,15000,20000,25000,30000,35000,40000,"NAN",])
+            .domain(allColours)
             .range(["#f7fcf5", "#e5f5e0", "#c7e9c0", "#a1d99b", "#74c476", 
                 "#41ab5d","#238b45","#005a32","black"]);
 
@@ -103,7 +104,6 @@ window.onload = function() {
                     }
                         return "black"
                     })  
-            
                 .style('stroke-width', 1.5)
                 .style("opacity",0.8)
                 // tooltips
@@ -155,8 +155,7 @@ window.onload = function() {
                 });
                 // Make legend
                 legend = svg.selectAll("#map")
-                    .data([5000,10000,15000,20000,25000,30000,35000,
-                        40000,"No data"])
+                    .data(allColours)
                     .enter()
                     .append("g")
                     .attr("class", ".legend")
@@ -180,27 +179,24 @@ window.onload = function() {
                     })
         }
     }
-
-        function webPage(){
-            // Give a littlebit of information about the webpage
-        
+        function personalInfo(){
             d3.select("body")
-            .append("p").text("When you hover over the map you can see the \
-            countries and the adjusted net household income.")
-            .append("p").text("When a country is clicked, a bar chart will \
-            open on the right.")
-            .append("p").text("Here, you can see the average life expectancy \
-            and the years of education the residents have on average")
-            .append("p").text("If a country without data is clicked, the \
+            .append("h4").text("Wiebe Jelsma (12468223)")
+            .append("h5").text("Minor Programmeren, Data Processing")
+            .append("h5").text("25-03-2019")
+        }
+        function webPage(){
+
+            // Give a littlebit of information about the webpage
+            d3.select("body")
+            .append("h4").text("When you hover over the map you can see the \
+            countries and the adjusted net household income. When a country is\
+             clicked, a bar chart will open on the right.")
+            .append("h4").text("Here, you can see the average life expectancy \
+            and the years of education the residents have on average.")
+            .append("h5").text("If a country without data is clicked, the \
             average of the OECD will be shown. Move cursor \
-                over the barchart to see its values!")
-            .append("p").text("If you want to see the data for yourself, \
-                click the Get dataset button!")
-            .append("p").text("For this assignment, D3 is used.")
-            .append("p").text("By: Wiebe Jelsma")
-            .append("p").text("Studentnummer: 12468223")
-            .append("p").text("Minor Programmeren, Data Processing")
-            .append("p").text("17-12-2018")
+            over the barchart to see its values!")
         }
         function make_barchart(data){
             // Set margins and coordinates for barchart
@@ -308,14 +304,12 @@ window.onload = function() {
                         return "Life expectancy of " + d.name;
                     });
         }
-    
-    getData()
+    getData()    
     webPage()
+    personalInfo()
     program(countries, income, educationYears, life)
     make_barchart(data)
-        
-       
-      }).catch(function(e){
-          throw(e);
+    }).catch(function(e){
+        throw(e);
     });
   };
